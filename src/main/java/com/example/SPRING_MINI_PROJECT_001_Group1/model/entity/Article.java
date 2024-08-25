@@ -25,7 +25,6 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @OneToMany(mappedBy = "article")
     private List<Bookmark> bookmark = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.service.serviceImpl;
 
+import com.example.SPRING_MINI_PROJECT_001_Group1.config.GetCurrentUser;
 import com.example.SPRING_MINI_PROJECT_001_Group1.exception.CustomNotfoundException;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.AppUserDto;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.User;
@@ -10,22 +11,23 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
 import org.modelmapper.ModelMapper;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
+
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
+    private final GetCurrentUser getCurrentUser;
 
-    public AppUserServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public AppUserServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, ModelMapper modelMapper, GetCurrentUser getCurrentUser) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
+        this.getCurrentUser = getCurrentUser;
     }
 
     @Override
@@ -48,6 +50,7 @@ public class AppUserServiceImpl implements AppUserService {
 
         return modelMapper.map(user, AppUserDto.class);
     }
+
     @Override
     public AppUserDto findUserByEmail(String email) {
         User appUser = appUserRepository.findByEmail(email)
@@ -62,5 +65,27 @@ public class AppUserServiceImpl implements AppUserService {
         return modelMapper.map(appUser, AppUserDto.class);
     }
 
-}
+    @Override
+    public AppUserDto viewUserDetails() {
+        User currentUser = getCurrentUser.getCurrentUser();
+        return modelMapper.map(currentUser, AppUserDto.class);
+    }
 
+    @Override
+    public AppUserDto updateUser(UserRequest userRequest) {
+        User currentUser = getCurrentUser.getCurrentUser();
+
+        currentUser.setUsername(userRequest.getUsername());
+        currentUser.setEmail(userRequest.getEmail());
+        currentUser.setRole(userRequest.getRole());
+        currentUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        currentUser.setAddress(userRequest.getAddress());
+        currentUser.setPhoneNumber(userRequest.getPhoneNumber());
+
+        User updatedUser = appUserRepository.save(currentUser);
+        return modelMapper.map(updatedUser, AppUserDto.class);
+    }
+
+
+
+}
