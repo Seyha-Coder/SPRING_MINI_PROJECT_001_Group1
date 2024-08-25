@@ -8,4 +8,5 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 public interface AppUserService extends UserDetailsService {
     AppUserDto register(UserRequest request);
     AppUserDto findUserByEmail(String email);
+    AppUserDto findUserByusername(String username);
 }

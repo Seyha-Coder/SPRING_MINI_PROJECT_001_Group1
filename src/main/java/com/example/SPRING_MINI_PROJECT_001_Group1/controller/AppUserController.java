@@ -3,6 +3,7 @@ package com.example.SPRING_MINI_PROJECT_001_Group1.controller;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.AuthResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.AppUserDto;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.AuthRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.UserRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.security.JwtService;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.AppUserService;
@@ -51,13 +52,16 @@ public class AppUserController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody UserRequest request) throws Exception {
-        AppUserDto appUser = appUserService.findUserByEmail(request.getUsername().toLowerCase());
+    public ResponseEntity<?> login(@Valid @RequestBody AuthRequest authRequest) throws Exception {
+        AppUserDto appUser = appUserService.findUserByusername(authRequest.getUsername().toLowerCase());
 
+        if (appUser == null) {
+            throw new Exception("User not found");
+        }
 
-        authenticate(request.getUsername().toLowerCase(), request.getPassword());
+        authenticate(appUser.getUsername(), authRequest.getPassword());
 
-        final UserDetails userDetails = appUserService.loadUserByUsername(request.getUsername().toLowerCase());
+        final UserDetails userDetails = appUserService.loadUserByUsername(appUser.getUsername());
         final String jwt = jwtService.generateToken(userDetails);
 
         AuthResponse authResponse = new AuthResponse(jwt);
@@ -71,6 +75,7 @@ public class AppUserController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
+
 
     private void authenticate(String username, String password) throws Exception {
         try {

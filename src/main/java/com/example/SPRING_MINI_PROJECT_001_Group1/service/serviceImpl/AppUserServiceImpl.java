@@ -54,5 +54,13 @@ public class AppUserServiceImpl implements AppUserService {
                 .orElseThrow(() -> new CustomNotfoundException("User not found with email: " + email));
         return modelMapper.map(appUser, AppUserDto.class);
     }
+
+    @Override
+    public AppUserDto findUserByusername(String username) {
+        User appUser = appUserRepository.findByUsername(username)
+                .orElseThrow(() -> new CustomNotfoundException("User not found with name: " + username));
+        return modelMapper.map(appUser, AppUserDto.class);
+    }
+
 }
 
