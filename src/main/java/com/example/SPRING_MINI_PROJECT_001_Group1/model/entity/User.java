@@ -1,13 +1,15 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.enums.UserRoleEnums;
 import jakarta.persistence.*;
+import jdk.dynalink.linker.LinkerServices;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -30,4 +32,10 @@ public class User {
     private LocalDateTime createdAt = LocalDateTime.now();
     @Column(name = "updated_at",nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Article> articleList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> commentList;
 }
