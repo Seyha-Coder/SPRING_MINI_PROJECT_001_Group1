@@ -24,7 +24,6 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @OneToMany(mappedBy = "categories")
     private List<Category_article> category_article;
 }

@@ -23,7 +23,6 @@ public class Category_article {
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category categories;
-
     @ManyToOne
     @JoinColumn(name = "article_id")
     private Article articles;

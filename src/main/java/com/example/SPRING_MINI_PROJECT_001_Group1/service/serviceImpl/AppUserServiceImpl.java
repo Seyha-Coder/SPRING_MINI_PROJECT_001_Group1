@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
@@ -68,9 +67,25 @@ public class AppUserServiceImpl implements AppUserService {
 
     @Override
     public AppUserDto viewUserDetails() {
-        UserDetails userDetails = getCurrentUser.getCurrentUser();
-        String username = userDetails.getUsername();
-        Optional<User> user = appUserRepository.findByUsername(username);
-        return modelMapper.map(user.orElseThrow(() -> new CustomNotfoundException("User not found with username: " + username)), AppUserDto.class);
+        User currentUser = getCurrentUser.getCurrentUser();
+        return modelMapper.map(currentUser, AppUserDto.class);
     }
+
+    @Override
+    public AppUserDto updateUser(UserRequest userRequest) {
+        User currentUser = getCurrentUser.getCurrentUser();
+
+        currentUser.setUsername(userRequest.getUsername());
+        currentUser.setEmail(userRequest.getEmail());
+        currentUser.setRole(userRequest.getRole());
+        currentUser.setPassword(passwordEncoder.encode(userRequest.getPassword()));
+        currentUser.setAddress(userRequest.getAddress());
+        currentUser.setPhoneNumber(userRequest.getPhoneNumber());
+
+        User updatedUser = appUserRepository.save(currentUser);
+        return modelMapper.map(updatedUser, AppUserDto.class);
+    }
+
+
+
 }

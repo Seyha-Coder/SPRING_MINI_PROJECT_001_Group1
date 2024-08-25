@@ -1,7 +1,7 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.controller;
 
+import com.example.SPRING_MINI_PROJECT_001_Group1.exception.CustomNotfoundException;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponse;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.AuthResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.AppUserDto;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.AuthRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.UserRequest;
@@ -16,13 +16,14 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("api/v1/auth")
-public class AppUserController {
+public class AuthController {
 
     private final AppUserService appUserService;
     private final JwtService jwtService;
@@ -30,7 +31,7 @@ public class AppUserController {
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
 
-    public AppUserController(AppUserService appUserService, JwtService jwtService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
+    public AuthController(AppUserService appUserService, JwtService jwtService, AuthenticationManager authenticationManager, PasswordEncoder passwordEncoder, ModelMapper modelMapper) {
         this.appUserService = appUserService;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
@@ -53,38 +54,30 @@ public class AppUserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest authRequest) throws Exception {
-        AppUserDto appUser = appUserService.findUserByusername(authRequest.getUsername().toLowerCase());
-
-        if (appUser == null) {
-            throw new Exception("User not found");
-        }
-
-        authenticate(appUser.getUsername(), authRequest.getPassword());
-
-        final UserDetails userDetails = appUserService.loadUserByUsername(appUser.getUsername());
+        AppUserDto appUser = appUserService.findUserByEmail(authRequest.getEmail().toLowerCase());
+        authenticate(appUser.getUsername().toLowerCase(), authRequest.getPassword());
+        final UserDetails userDetails = appUserService.loadUserByUsername(appUser.getUsername().toLowerCase());
         final String jwt = jwtService.generateToken(userDetails);
-
-        AuthResponse authResponse = new AuthResponse(jwt);
-
-        ApiResponse<AppUserDto> apiResponse = ApiResponse.<AppUserDto>builder()
-                .payload(appUser)
-                .message("Login successfully")
-                .token(authResponse.getToken())
-                .code(200)
+        ApiResponse<Object> apiResponse = ApiResponse.builder()
+                .payload(Map.of("token", jwt))
+                .message("You have logged in to the system successfully.")
                 .status(HttpStatus.OK)
                 .build();
+
+        // Return the response
         return ResponseEntity.ok(apiResponse);
     }
+
 
 
     private void authenticate(String username, String password) throws Exception {
         try {
             UserDetails userApp = appUserService.loadUserByUsername(username);
             if (userApp == null) {
-                throw new Exception("Wrong Email");
+                throw new CustomNotfoundException("Wrong Email");
             }
             if (!passwordEncoder.matches(password, userApp.getPassword())) {
-                throw new Exception("Wrong Password");
+                throw new CustomNotfoundException("Wrong Password");
             }
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
@@ -93,15 +86,5 @@ public class AppUserController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
-    @GetMapping
-    public ResponseEntity<?> viewUserDetails(){
-        AppUserDto appUserDto = appUserService.viewUserDetails();
-        ApiResponse<AppUserDto> apiResponse = ApiResponse.<AppUserDto>builder()
-                .payload(appUserDto)
-                .message("View user successfully.")
-                .code(201)
-                .status(HttpStatus.OK)
-                .build();
-        return ResponseEntity.ok(apiResponse);
-    }
+
 }
