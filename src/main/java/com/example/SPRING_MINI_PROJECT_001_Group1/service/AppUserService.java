@@ -9,4 +9,5 @@ public interface AppUserService extends UserDetailsService {
     AppUserDto register(UserRequest request);
     AppUserDto findUserByEmail(String email);
     AppUserDto findUserByusername(String username);
+    AppUserDto viewUserDetails();
 }

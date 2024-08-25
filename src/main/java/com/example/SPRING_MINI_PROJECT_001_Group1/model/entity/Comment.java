@@ -3,27 +3,28 @@ package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
-@Entity(name = "bookmark_tb")
+@Entity(name = "comment_tb")
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
 @Setter
 @Getter
-public class Bookmark {
+@Builder
+public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "bookmark_id")
+    @Column(name = "comment_id")
     private Long id;
-    private Boolean status;
+    private String cmt;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "article_id")
-    private Article article;
-    @ManyToOne(cascade = CascadeType.ALL)
+
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
+    @ManyToOne
+    @JoinColumn(name = "article_id")
+    private Article article;
 }

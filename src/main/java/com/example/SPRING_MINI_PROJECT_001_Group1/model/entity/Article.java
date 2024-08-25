@@ -29,5 +29,7 @@ public class Article {
     @OneToMany(mappedBy = "article")
     private List<Bookmark> bookmark = new ArrayList<>();
 
+    @OneToMany(mappedBy = "article")
+    private List<Comment> comments = new ArrayList<>();
 
 }

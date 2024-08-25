@@ -93,4 +93,15 @@ public class AppUserController {
             throw new Exception("INVALID_CREDENTIALS", e);
         }
     }
+    @GetMapping
+    public ResponseEntity<?> viewUserDetails(){
+        AppUserDto appUserDto = appUserService.viewUserDetails();
+        ApiResponse<AppUserDto> apiResponse = ApiResponse.<AppUserDto>builder()
+                .payload(appUserDto)
+                .message("View user successfully.")
+                .code(201)
+                .status(HttpStatus.OK)
+                .build();
+        return ResponseEntity.ok(apiResponse);
+    }
 }

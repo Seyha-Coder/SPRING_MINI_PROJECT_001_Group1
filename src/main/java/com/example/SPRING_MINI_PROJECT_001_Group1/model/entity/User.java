@@ -33,9 +33,5 @@ public class User {
     private LocalDateTime createdAt = LocalDateTime.now();
     @Column(name = "updated_at",nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Article> articles;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
-    private List<Bookmark> bookmarks = new ArrayList<>();
 }
