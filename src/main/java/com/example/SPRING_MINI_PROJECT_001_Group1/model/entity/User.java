@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.List;
+
 @Setter
 @Getter
 @AllArgsConstructor
@@ -30,4 +32,10 @@ public class User {
     private LocalDateTime createdAt = LocalDateTime.now();
     @Column(name = "updated_at",nullable = false)
     private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @OneToMany(mappedBy = "user")
+    private List<Category> category;
+
+    @OneToMany(mappedBy = "user")
+    private List<Article> articles;
 }
