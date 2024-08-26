@@ -26,7 +26,7 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public Category getByIdCategory(Integer id) {
         Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new CustomNotfoundException("Not Found!")
+                () -> new CustomNotfoundException("Category id "+ id + "not found.")
         );
         return category;
     }
@@ -42,7 +42,7 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public Category updateCategory(CategoryRequest categoryRequest, Integer id) {
         Category getCategoryById = categoryRepository.findById(id).orElseThrow(
-                () -> new CustomNotfoundException("Not Found!")
+                () -> new CustomNotfoundException("Category id "+ id + "not found.")
         );
         return categoryRepository.save(categoryRequest.toEntity(id,getCategoryById.getCreateAt()));
     }
@@ -50,14 +50,14 @@ public class CategoryServiceImp implements CategoryService {
     @Override
     public Category deleteCategory(Integer id) {
         Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new CustomNotfoundException("Not Found!")
+                () -> new CustomNotfoundException("Category id "+ id + "not found.")
         );
         return category;
     }
 
     @Override
     public List<Category> getAllCategory(Integer pageNo, Integer pageSize, String sortBy, Sort.Direction orderBy) {
-        Pageable pageable = PageRequest.of(pageNo-1,pageSize,Sort.by(orderBy,sortBy));
+        Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by(orderBy,sortBy));
         Page<Category> categories = categoryRepository.findAll(pageable);
         return categories.getContent();
     }

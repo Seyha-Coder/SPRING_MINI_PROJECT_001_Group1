@@ -1,6 +1,8 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.request;
 
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Category;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -10,6 +12,8 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class CategoryRequest {
+    @NotBlank(message = "Category name may not be null")
+    @NotNull
     private String categoryName;
 
     public Category toEntity(){

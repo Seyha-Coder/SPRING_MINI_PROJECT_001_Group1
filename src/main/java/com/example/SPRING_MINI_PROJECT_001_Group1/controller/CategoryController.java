@@ -6,6 +6,7 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryRespons
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +26,7 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "Get all category")
-    public ResponseEntity<ApiResponseCategory<List<Category>>> getAllCategory(@RequestParam (defaultValue = "1") Integer pageNo,
+    public ResponseEntity<ApiResponseCategory<List<Category>>> getAllCategory(@RequestParam (defaultValue = "0") Integer pageNo,
                                             @RequestParam (defaultValue = "10") Integer pageSize,
                                             @RequestParam (defaultValue = "categoryId") String sortBy,
                                             @RequestParam Sort.Direction orderBy){
@@ -49,7 +50,7 @@ public class CategoryController {
 
     @PostMapping
     @Operation(summary = "Create a new category")
-    public ResponseEntity<ApiResponseCategory<CategoryResponse>> createCategory(@RequestBody CategoryRequest categoryRequest){
+    public ResponseEntity<ApiResponseCategory<CategoryResponse>> createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
         ApiResponseCategory<CategoryResponse> apiResponseCategory = ApiResponseCategory.<CategoryResponse>builder()
                 .message("A new category is created successfully.")
                 .status(HttpStatus.CREATED)
