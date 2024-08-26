@@ -1,5 +1,7 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,12 +20,16 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
     private String categoryName;
-    private float amountOfArticle;
+    private Float amountOfArticle;
     private LocalDateTime createAt;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime updateAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
     @OneToMany(mappedBy = "categories")
+    @JsonIgnore
     private List<Category_article> category_article;
+
 }
