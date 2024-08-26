@@ -25,5 +25,5 @@ public class Category {
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "categories")
-    private List<Category_article> category_article;
+    private List<CategoryArticle> category_article;
 }

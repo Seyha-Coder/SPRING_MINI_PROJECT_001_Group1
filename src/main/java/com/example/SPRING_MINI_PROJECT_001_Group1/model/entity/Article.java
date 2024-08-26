@@ -27,8 +27,9 @@ public class Article {
     private User user;
     @OneToMany(mappedBy = "article")
     private List<Bookmark> bookmark = new ArrayList<>();
-
     @OneToMany(mappedBy = "article")
     private List<Comment> comments = new ArrayList<>();
+    @OneToMany(mappedBy = "articles")
+    private List<CategoryArticle> categoryArticles = new ArrayList<>();
 
 }
