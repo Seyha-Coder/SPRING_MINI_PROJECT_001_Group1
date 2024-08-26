@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
@@ -19,11 +20,13 @@ public class Category {
     private Integer categoryId;
     private String categoryName;
     private float amountOfArticle;
+
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-    @OneToMany(mappedBy = "categories")
-    private List<Category_article> category_article;
+
+    @OneToMany(mappedBy = "categories",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<CategoryArticle> categoryArticle = new ArrayList<>();
 }

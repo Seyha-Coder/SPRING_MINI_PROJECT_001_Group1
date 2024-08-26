@@ -2,6 +2,7 @@ package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,6 +19,8 @@ public class Comment {
     @Column(name = "comment_id")
     private Long id;
     private String cmt;
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

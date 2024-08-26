@@ -1,11 +1,11 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
 import jakarta.persistence.*;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 @Entity
@@ -14,11 +14,14 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class Category_article {
+public class CategoryArticle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
     @ManyToOne
     @JoinColumn(name = "category_id")
@@ -26,4 +29,6 @@ public class Category_article {
     @ManyToOne
     @JoinColumn(name = "article_id")
     private Article articles;
+
+
 }

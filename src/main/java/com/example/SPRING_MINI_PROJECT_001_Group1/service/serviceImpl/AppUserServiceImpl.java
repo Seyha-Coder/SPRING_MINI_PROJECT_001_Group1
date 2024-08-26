@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.modelmapper.ModelMapper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
@@ -85,6 +86,7 @@ public class AppUserServiceImpl implements AppUserService {
         User updatedUser = appUserRepository.save(currentUser);
         return modelMapper.map(updatedUser, AppUserDto.class);
     }
+
 
 
 
