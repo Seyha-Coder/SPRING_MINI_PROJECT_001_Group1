@@ -51,7 +51,7 @@ public class CategoryServiceImp implements CategoryService {
         Category getCategoryById = categoryRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Category id "+ id + "not found.")
         );
-        return categoryRepository.save(categoryRequest.toEntity(id,getCategoryById.getCreateAt()));
+        return categoryRepository.save(categoryRequest.toEntity(id,getCategoryById.getCreateAt(),currentUser.getCurrentUser()));
     }
 
     @Override

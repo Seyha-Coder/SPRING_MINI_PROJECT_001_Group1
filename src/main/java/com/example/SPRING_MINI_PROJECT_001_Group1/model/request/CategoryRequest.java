@@ -1,6 +1,7 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.request;
 
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Category;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
@@ -19,8 +20,8 @@ public class CategoryRequest {
     public Category toEntity(){
          return new Category(null,this.categoryName,0F,null,null,null,null);
     }
-    public Category toEntity(Integer id,LocalDateTime createAt){
-        return new Category(id,this.categoryName,0F,createAt, LocalDateTime.now(),null,null);
+    public Category toEntity(Integer id, LocalDateTime createAt, User user){
+        return new Category(id,this.categoryName,0F,createAt, LocalDateTime.now(),user,null);
     }
 
 
