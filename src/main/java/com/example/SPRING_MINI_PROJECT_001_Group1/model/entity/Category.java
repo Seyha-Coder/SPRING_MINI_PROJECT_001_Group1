@@ -30,6 +30,5 @@ public class Category {
     private User user;
     @OneToMany(mappedBy = "categories")
     @JsonIgnore
-    private List<Category_article> category_article;
-
+    private List<CategoryArticle> category_article;
 }
