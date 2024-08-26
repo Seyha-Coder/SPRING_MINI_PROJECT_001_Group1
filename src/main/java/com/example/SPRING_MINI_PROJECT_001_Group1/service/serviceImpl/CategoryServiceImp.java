@@ -1,11 +1,14 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.service.serviceImpl;
 
+import com.example.SPRING_MINI_PROJECT_001_Group1.config.GetCurrentUser;
 import com.example.SPRING_MINI_PROJECT_001_Group1.exception.CustomNotfoundException;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Category;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.User;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.CategoryRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.repository.CategoryRepository;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.CategoryService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,14 +23,18 @@ import java.util.List;
 @AllArgsConstructor
 public class CategoryServiceImp implements CategoryService {
     private CategoryRepository categoryRepository;
-
+    private GetCurrentUser currentUser;
 
 
     @Override
     public Category getByIdCategory(Integer id) {
+        Long userId= currentUser.getCurrentUser().getId();
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Category id "+ id + "not found.")
         );
+        if(category.getUser().getId() != userId){
+            throw new CustomNotfoundException(" You have no permission to access!");
+        }
         return category;
     }
 
@@ -35,30 +42,41 @@ public class CategoryServiceImp implements CategoryService {
     public CategoryResponse createCategory(CategoryRequest categoryRequest) {
         Category category = categoryRequest.toEntity();
         category.setCreateAt(LocalDateTime.now());
+        category.setUser(currentUser.getCurrentUser());
         Category savaCategory = categoryRepository.save(category);
         return new CategoryResponse(savaCategory.getCategoryId(),savaCategory.getCategoryName(),savaCategory.getCreateAt());
     }
 
     @Override
     public Category updateCategory(CategoryRequest categoryRequest, Integer id) {
+        Long userId = currentUser.getCurrentUser().getId();
         Category getCategoryById = categoryRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Category id "+ id + "not found.")
         );
-        return categoryRepository.save(categoryRequest.toEntity(id,getCategoryById.getCreateAt()));
+        if(getCategoryById.getUser().getId() != userId){
+            throw new CustomNotfoundException("You have no permission to access!");
+        }
+        return categoryRepository.save(categoryRequest.toEntity(id,getCategoryById.getCreateAt(),currentUser.getCurrentUser()));
+
     }
 
     @Override
     public Category deleteCategory(Integer id) {
+        Long userId = currentUser.getCurrentUser().getId();
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Category id "+ id + "not found.")
         );
+        if(category.getUser().getId() != userId){
+            throw new CustomNotfoundException("You have no permission to access!");
+        }
         return category;
     }
 
     @Override
     public List<Category> getAllCategory(Integer pageNo, Integer pageSize, String sortBy, Sort.Direction orderBy) {
-        Pageable pageable = PageRequest.of(pageNo,pageSize,Sort.by(orderBy,sortBy));
-        Page<Category> categories = categoryRepository.findAll(pageable);
+        User user = currentUser.getCurrentUser();
+        Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(orderBy, sortBy));
+        Page<Category> categories = categoryRepository.findByUserId(user.getId(), pageable);
         return categories.getContent();
     }
 }

@@ -7,6 +7,7 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,14 +27,15 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "Get all category")
-    public ResponseEntity<ApiResponseCategory<List<Category>>> getAllCategory(@RequestParam (defaultValue = "0") Integer pageNo,
+    public ResponseEntity<ApiResponseCategory<List<Category>>> getAllCategory(@Positive @RequestParam (defaultValue = "1") Integer pageNo,
                                             @RequestParam (defaultValue = "10") Integer pageSize,
                                             @RequestParam (defaultValue = "categoryId") String sortBy,
                                             @RequestParam Sort.Direction orderBy){
+        List<Category> categories = categoryService.getAllCategory(pageNo, pageSize, sortBy, orderBy);
         ApiResponseCategory<List<Category>> apiResponseCategory = ApiResponseCategory.<List<Category>>builder()
                 .message("Get all categories successfully.")
                 .status(HttpStatus.OK)
-                .payload(categoryService.getAllCategory(pageNo,pageSize,sortBy,orderBy))
+                .payload(categories)
                 .build();
         return ResponseEntity.ok(apiResponseCategory);
     }
