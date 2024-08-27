@@ -4,6 +4,7 @@ package com.example.SPRING_MINI_PROJECT_001_Group1.controller;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.ApiResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.FileResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.FileService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -23,6 +24,7 @@ import java.util.List;
 
 public class FileController {
     private final FileService fileService;
+    @Operation(summary = "upload many files")
     @PostMapping(value = "/uploadMany",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadFile(@RequestParam List<MultipartFile> files) throws IOException {
         String fileName = null;
@@ -41,6 +43,7 @@ public class FileController {
                 .payload( fileResponses).build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "upload a file")
     @PostMapping(value = "/uploadOne",consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<?> uploadOneFile(@RequestParam MultipartFile file) throws IOException {
         String fileName = null;
@@ -57,6 +60,7 @@ public class FileController {
                 .payload( fileResponse).build();
         return ResponseEntity.ok(response);
     }
+    @Operation(summary = "Get a file by its name")
     @GetMapping
     public ResponseEntity<?> getFile(@RequestParam String fileName) throws IOException {
         Resource resource = fileService.getFileByFileName(fileName);
