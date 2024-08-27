@@ -1,6 +1,5 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.enums.UserRoleEnums;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,8 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+
 
 @Setter
 @Getter
