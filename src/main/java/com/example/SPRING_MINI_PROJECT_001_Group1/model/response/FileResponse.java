@@ -1,4 +1,4 @@
-package com.example.SPRING_MINI_PROJECT_001_Group1.model;
+package com.example.SPRING_MINI_PROJECT_001_Group1.model.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

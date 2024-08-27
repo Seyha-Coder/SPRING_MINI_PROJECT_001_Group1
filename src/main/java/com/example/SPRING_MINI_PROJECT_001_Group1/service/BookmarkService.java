@@ -1,6 +1,6 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.service;
 
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponseBookmark;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.ApiResponseBookmark;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Bookmark;
 
 import java.util.List;

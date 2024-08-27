@@ -1,6 +1,6 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.controller;
 
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.ApiResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoComment.dtoCommentRequest.DTOCommentRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Comment;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.CommentService;

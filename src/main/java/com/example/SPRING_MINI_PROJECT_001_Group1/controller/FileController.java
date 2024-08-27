@@ -1,8 +1,8 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.controller;
 
 
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponse;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.FileResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.ApiResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.FileResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.FileService;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;

@@ -2,8 +2,8 @@ package com.example.SPRING_MINI_PROJECT_001_Group1.service.serviceImpl;
 
 import com.example.SPRING_MINI_PROJECT_001_Group1.config.GetCurrentUser;
 import com.example.SPRING_MINI_PROJECT_001_Group1.exception.CustomNotfoundException;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponseBookmark;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.CommentListResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.ApiResponseBookmark;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CommentListResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Article;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Bookmark;
 import com.example.SPRING_MINI_PROJECT_001_Group1.repository.ArticleRepository;

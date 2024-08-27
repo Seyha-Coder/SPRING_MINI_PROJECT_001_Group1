@@ -19,6 +19,7 @@ import java.util.List;
 @Entity(name = "category_tb")
 @Setter
 @Getter
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +27,6 @@ public class Category {
     private String categoryName;
     private Integer amountOfArticle;
     private LocalDateTime createAt;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime updateAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
