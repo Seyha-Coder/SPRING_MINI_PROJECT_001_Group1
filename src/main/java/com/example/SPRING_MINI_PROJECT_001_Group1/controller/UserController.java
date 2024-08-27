@@ -4,6 +4,7 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.AppUserDto;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.UserRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.AppUserService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,8 @@ public class UserController {
     public UserController(AppUserService appUserService) {
         this.appUserService = appUserService;
     }
-    @GetMapping("/userDetails")
+    @Operation(summary = "Get current user info")
+    @GetMapping
     public ResponseEntity<?> viewUserDetails(){
         AppUserDto appUserDto = appUserService.viewUserDetails();
         ApiResponse<AppUserDto> apiResponse = ApiResponse.<AppUserDto>builder()
@@ -29,6 +31,7 @@ public class UserController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
+    @Operation(summary = "Update current user info")
     @PutMapping("/update")
     public ResponseEntity<?> updateCurrentUser(@RequestBody UserRequest userRequest) {
         AppUserDto updatedUser = appUserService.updateUser(userRequest);

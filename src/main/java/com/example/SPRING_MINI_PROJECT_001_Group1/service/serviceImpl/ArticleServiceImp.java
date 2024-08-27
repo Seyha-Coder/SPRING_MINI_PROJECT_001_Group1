@@ -149,7 +149,7 @@ public class ArticleServiceImp implements ArticleService {
     @Override
     public Article deleteArticle(Long id) throws Exception {
         if (!getCurrentUser.getCurrentUser().getRole().equals("AUTHOR")) {
-            throw new Exception("User reader can not delete article");
+            throw new CustomNotfoundException("User reader can not delete article");
         }
         Article article = articleRepository.findById(id).orElseThrow(
                 ()-> new CustomNotfoundException("Not found Article with id "+id)
@@ -163,7 +163,7 @@ public class ArticleServiceImp implements ArticleService {
     @Override
     public DTOArticleCommentResponse update(Long id, DTORequestArticle dtoRequestArticle) throws Exception {
         if (!getCurrentUser.getCurrentUser().getRole().equals("AUTHOR")) {
-            throw new Exception("User reader cannot update article");
+            throw new CustomNotfoundException("User reader cannot update article");
         }
 
         Article article = articleRepository.findById(id).orElseThrow(

@@ -25,11 +25,10 @@ public class BookmarkController {
 
     @GetMapping
     public ResponseEntity<?> getAllBookmarks(
-                                           @Positive
-                                           @RequestParam(defaultValue = "0") Integer pageNo,
-                                           @RequestParam(defaultValue = "10") Integer pageSize,
-                                           @RequestParam(defaultValue = "articleId") String sortBy,
-                                           @RequestParam(defaultValue = "DESC") String direction) {
+           @RequestParam(defaultValue = "0") Integer pageNo,
+           @RequestParam(defaultValue = "10") Integer pageSize,
+           @RequestParam(defaultValue = "articleId") String sortBy,
+           @RequestParam(defaultValue = "DESC") String direction) {
 
         List<ApiResponseBookmark> bookmarks = bookmarkService.getAllBookmarks(pageNo, pageSize, sortBy, direction);
         ApiResponse<?> response = ApiResponse
@@ -41,7 +40,7 @@ public class BookmarkController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/{bookmarkId}")
+    @PostMapping("/{id}")
     public ResponseEntity<?> createBookmark(@PathVariable Long bookmarkId) {
         Bookmark bookmark = bookmarkService.addBookmark(bookmarkId);
         ApiResponse<Object> apiResponse = ApiResponse
@@ -53,7 +52,7 @@ public class BookmarkController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PutMapping("/{bookmarkId}")
+    @PutMapping("/{id}")
     public ResponseEntity<?> updateBookmark(@PathVariable Long bookmarkId, @RequestParam Boolean status) {
         Bookmark bookmark = bookmarkService.updateBookmark(bookmarkId, status);
         ApiResponse<Object> apiResponse = ApiResponse
