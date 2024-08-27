@@ -41,11 +41,11 @@ public class BookmarkController {
     }
 
     @PostMapping("/{id}")
-    public ResponseEntity<?> createBookmark(@PathVariable Long bookmarkId) {
-        Bookmark bookmark = bookmarkService.addBookmark(bookmarkId);
+    public ResponseEntity<?> createBookmark(@PathVariable Long id) {
+        Bookmark bookmark = bookmarkService.addBookmark(id);
         ApiResponse<Object> apiResponse = ApiResponse
                 .builder()
-                .message("Create a bookmark id " + bookmarkId +" successfully")
+                .message("Create a bookmark id " + id +" successfully")
                 .status(HttpStatus.CREATED)
                 .payload(bookmark)
                 .build();
@@ -53,11 +53,11 @@ public class BookmarkController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateBookmark(@PathVariable Long bookmarkId, @RequestParam Boolean status) {
-        Bookmark bookmark = bookmarkService.updateBookmark(bookmarkId, status);
+    public ResponseEntity<?> updateBookmark(@PathVariable Long id, @RequestParam Boolean status) {
+        Bookmark bookmark = bookmarkService.updateBookmark(id, status);
         ApiResponse<Object> apiResponse = ApiResponse
                 .builder()
-                .message("Update article id " + bookmarkId +" is unmarked successfully")
+                .message("Update article id " + id +" is unmarked successfully")
                 .status(HttpStatus.OK)
                 .payload(bookmark)
                 .build();

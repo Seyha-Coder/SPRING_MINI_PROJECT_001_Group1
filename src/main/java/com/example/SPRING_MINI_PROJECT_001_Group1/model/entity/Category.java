@@ -33,7 +33,7 @@ public class Category {
     @JsonIgnore
     private User user;
 
-    @OneToMany(mappedBy = "categories",cascade = CascadeType.ALL,orphanRemoval = true)
+    @OneToMany(mappedBy = "categories",cascade = CascadeType.ALL)
     private List<CategoryArticle> articleList;
 
     public CategoryGetResponse toResponse(){

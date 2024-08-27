@@ -41,6 +41,18 @@ public class CategoryServiceImp implements CategoryService {
 
     @Override
     public CategoryCreateResponse createCategory(CategoryRequest categoryRequest) {
+
+        Long userId = currentUser.getCurrentUser().getId();
+        if(!currentUser.getCurrentUser().getRole().equals("AUTHOR")){
+            throw new CustomNotfoundException("Only Author can create category.");
+        }
+        if(currentUser.getCurrentUser().getRole().equalsIgnoreCase("READER")){
+            throw new CustomNotfoundException("Only Author can create category.");
+        }
+        boolean exists = categoryRepository.existsByCategoryNameAndUserId(categoryRequest.getCategoryName(), userId);
+        if (exists) {
+            throw new CustomNotfoundException("Category name can't be duplicate");
+        }
         Category category = categoryRequest.toEntity();
         category.setCreateAt(LocalDateTime.now());
         category.setUser(currentUser.getCurrentUser());
@@ -80,7 +92,6 @@ public class CategoryServiceImp implements CategoryService {
         User user = currentUser.getCurrentUser();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(orderBy, sortBy));
         Page<Category> categories = categoryRepository.findByUserId(user.getId(), pageable);
-
         return categories.getContent().stream().map(Category::toResponse).toList();
     }
 

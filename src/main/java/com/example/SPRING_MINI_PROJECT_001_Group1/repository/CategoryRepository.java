@@ -15,5 +15,6 @@ import java.util.Optional;
 public interface CategoryRepository extends JpaRepository<Category,Long> {
 
     Page<Category> findByUserId(Long userId, Pageable pageable);
+    boolean existsByCategoryNameAndUserId(String categoryName, Long userId);
 
 }
