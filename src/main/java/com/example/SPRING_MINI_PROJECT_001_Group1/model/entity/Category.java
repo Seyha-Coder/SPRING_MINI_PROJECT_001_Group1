@@ -28,12 +28,12 @@ public class Category {
     private LocalDateTime createAt;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime updateAt;
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
 
-    @OneToMany(mappedBy = "categories",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "categories",cascade = CascadeType.ALL,orphanRemoval = true)
 //    @JsonIgnore
     private List<CategoryArticle> articleList;
 

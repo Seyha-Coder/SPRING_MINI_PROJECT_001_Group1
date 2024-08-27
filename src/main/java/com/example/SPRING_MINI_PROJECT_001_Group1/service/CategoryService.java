@@ -16,7 +16,7 @@ public interface CategoryService {
 
     Category updateCategory(CategoryRequest categoryRequest, Integer id);
 
-    Category deleteCategory(Integer id);
+    void deleteCategory(Integer id);
 
     List<CategoryGetResponse> getAllCategory(Integer pageNo, Integer pageSize, String sortBy, Sort.Direction orderBy);
 }

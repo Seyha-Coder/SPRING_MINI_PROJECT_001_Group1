@@ -52,7 +52,7 @@ public class CategoryServiceImp implements CategoryService {
     public Category updateCategory(CategoryRequest categoryRequest, Integer id) {
         Long userId = currentUser.getCurrentUser().getId();
         Category getCategoryById = categoryRepository.findById(id).orElseThrow(
-                () -> new CustomNotfoundException("Category id "+ id + "not found.")
+                () -> new CustomNotfoundException("Category id "+ id + " not found.")
         );
         if(getCategoryById.getUser().getId() != userId){
             throw new CustomNotfoundException("You have no permission to access!");
@@ -62,15 +62,16 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public Category deleteCategory(Integer id) {
+    public void deleteCategory(Integer id) {
         Long userId = currentUser.getCurrentUser().getId();
         Category category = categoryRepository.findById(id).orElseThrow(
-                () -> new CustomNotfoundException("Category id "+ id + "not found.")
+                () -> new CustomNotfoundException("Category id "+ id + " not found.")
         );
         if(category.getUser().getId() != userId){
             throw new CustomNotfoundException("You have no permission to access!");
         }
-        return category;
+        categoryRepository.deleteById(id);
+
     }
 
 
