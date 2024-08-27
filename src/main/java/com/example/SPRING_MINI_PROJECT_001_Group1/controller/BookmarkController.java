@@ -1,13 +1,8 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.controller;
 
-import com.example.SPRING_MINI_PROJECT_001_Group1.config.GetCurrentUser;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponseBookmark;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.CategoryIdListResponse;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.CommentListResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Bookmark;
-import com.example.SPRING_MINI_PROJECT_001_Group1.repository.BookmarkRepository;
-import com.example.SPRING_MINI_PROJECT_001_Group1.repository.CategoryArticleRepository;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.BookmarkService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Positive;
@@ -16,10 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 @RestController
 @AllArgsConstructor
