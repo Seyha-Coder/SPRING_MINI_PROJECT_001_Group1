@@ -126,13 +126,14 @@ public class ArticleServiceImp implements ArticleService {
     }
 
     @Override
-    public DTOResponseArticle getArticleById(Long id) {
+    public DTOCommentResponse getArticleById(Long id) {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Not Found")
         );
-        DTOResponseArticle dtoResponseArticle = new DTOResponseArticle();
-        dtoResponseArticle.responseArticleWithCategoryIdList(article);
-        return dtoResponseArticle;
+        DTOCommentResponse dtoCommentResponse = new DTOCommentResponse();
+        List<Comment> comments = article.getComments();
+        dtoCommentResponse.responseComment(article,comments);
+        return dtoCommentResponse;
     }
 
     @Override

@@ -19,7 +19,7 @@ public interface ArticleService {
 
     DTOCommentResponse postComment(Long id, DTOCommentRequest dtoCommentRequest);
 
-    DTOResponseArticle getArticleById(Long id);
+    DTOCommentResponse getArticleById(Long id);
 
     DTOArticleCommentResponse getCommentArticleById(Long id);
 

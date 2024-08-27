@@ -82,7 +82,7 @@ public class ArticleController {
     @Operation(summary = "Get comment on any article",
             description = "The request has succeeded and a new resource has been created as a result.")
     public ResponseEntity<ApiResponse<Object>> getArticleById(@PathVariable Long id){
-        DTOResponseArticle getArticle = articleService.getArticleById(id);
+        DTOCommentResponse getArticle = articleService.getArticleById(id);
         ApiResponse<Object> apiResponse = ApiResponse.builder()
                 .message("Get all comments on article id "+id+" successfully")
                 .payload(getArticle)
