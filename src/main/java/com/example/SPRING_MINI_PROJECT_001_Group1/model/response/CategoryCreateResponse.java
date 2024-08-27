@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @Setter
 @Getter
 public class CategoryCreateResponse {
-    private Integer categoryId;;
+    private Long categoryId;;
     private String categoryName;
     private LocalDateTime createAt;
 

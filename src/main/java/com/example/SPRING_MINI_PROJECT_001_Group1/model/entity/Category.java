@@ -22,7 +22,7 @@ import java.util.List;
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer categoryId;
+    private Long categoryId;
     private String categoryName;
     private Integer amountOfArticle;
     private LocalDateTime createAt;
@@ -34,7 +34,6 @@ public class Category {
     private User user;
 
     @OneToMany(mappedBy = "categories",cascade = CascadeType.ALL,orphanRemoval = true)
-//    @JsonIgnore
     private List<CategoryArticle> articleList;
 
     public CategoryGetResponse toResponse(){

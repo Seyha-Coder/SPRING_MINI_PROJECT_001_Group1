@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryGetResponse {
-    private Integer categoryId;;
+    private Long categoryId;;
     private String categoryName;
     private Integer amountOfArticles;
     private LocalDateTime createdAt;

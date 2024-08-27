@@ -69,7 +69,7 @@ public class ArticleServiceImp implements ArticleService {
             categoryArticle.setArticles(article);
             categoryArticle.setCategories(category);
             article.getCategoryArticles().add(categoryArticle);
-            category.getCategoryArticle().add(categoryArticle);
+            category.getArticleList().add(categoryArticle);
         }
         // Save the article
         Article savedArticle = articleRepository.save(article);

@@ -22,7 +22,7 @@ public class CategoryRequest {
     public Category toEntity(){
          return new Category(null,this.categoryName,0,null,null,null,null);
     }
-    public Category toEntity(Integer id, LocalDateTime createAt, User user){
+    public Category toEntity(Long id, LocalDateTime createAt, User user){
         return new Category(id,this.categoryName,0,createAt, LocalDateTime.now(),user,null);
     }
 

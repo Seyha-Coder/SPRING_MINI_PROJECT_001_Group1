@@ -27,7 +27,7 @@ public class CategoryServiceImp implements CategoryService {
 
 
     @Override
-    public Category getByIdCategory(Integer id) {
+    public Category getByIdCategory(Long id) {
         Long userId= currentUser.getCurrentUser().getId();
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Category id "+ id + "not found.")
@@ -49,7 +49,7 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public Category updateCategory(CategoryRequest categoryRequest, Integer id) {
+    public Category updateCategory(CategoryRequest categoryRequest, Long id) {
         Long userId = currentUser.getCurrentUser().getId();
         Category getCategoryById = categoryRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Category id "+ id + " not found.")
@@ -62,7 +62,7 @@ public class CategoryServiceImp implements CategoryService {
     }
 
     @Override
-    public void deleteCategory(Integer id) {
+    public void deleteCategory(Long id) {
         Long userId = currentUser.getCurrentUser().getId();
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Category id "+ id + " not found.")

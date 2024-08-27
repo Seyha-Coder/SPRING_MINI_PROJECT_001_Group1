@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category,Integer> {
+public interface CategoryRepository extends JpaRepository<Category,Long> {
 
     Page<Category> findByUserId(Long userId, Pageable pageable);
 

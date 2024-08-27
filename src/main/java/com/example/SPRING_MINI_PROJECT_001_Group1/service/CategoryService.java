@@ -10,13 +10,13 @@ import java.util.List;
 
 public interface CategoryService {
 
-    Category getByIdCategory(Integer id);
+    Category getByIdCategory(Long id);
 
     CategoryCreateResponse createCategory(CategoryRequest categoryRequest);
 
-    Category updateCategory(CategoryRequest categoryRequest, Integer id);
+    Category updateCategory(CategoryRequest categoryRequest, Long id);
 
-    void deleteCategory(Integer id);
+    void deleteCategory(Long id);
 
     List<CategoryGetResponse> getAllCategory(Integer pageNo, Integer pageSize, String sortBy, Sort.Direction orderBy);
 }

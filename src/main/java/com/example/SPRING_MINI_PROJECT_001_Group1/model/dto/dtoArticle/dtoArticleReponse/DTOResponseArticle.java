@@ -22,7 +22,7 @@ public class DTOResponseArticle {
     private String description;
     private LocalDateTime createdAt;
     private Long ownerOfArticle;
-    private List<Integer> categoryIdList;
+    private List<Long> categoryIdList;
     public void responseArticleWithCategoryIdList(Article article) {
         id = article.getId();
         title = article.getTitle();
@@ -31,7 +31,7 @@ public class DTOResponseArticle {
         ownerOfArticle = article.getUser().getId();
         this.categoryIdList = article.getCategoryArticles().stream()
                 .map(categoryArticle -> categoryArticle.getCategories().getCategoryId())
-                .collect(Collectors.toList());
+                .collect(Collectors.toList()).reversed();
     }
 
 

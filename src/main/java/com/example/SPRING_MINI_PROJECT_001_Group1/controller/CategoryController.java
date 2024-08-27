@@ -43,7 +43,7 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get category by id")
-    public ResponseEntity<ApiResponseCategory<Category>> getByIdCategory(@PathVariable Integer id){
+    public ResponseEntity<ApiResponseCategory<Category>> getByIdCategory(@PathVariable Long id){
         ApiResponseCategory<Category> apiResponseCategory = ApiResponseCategory.<Category>builder()
                 .message("Get category with id 16 successfully.")
                 .status(HttpStatus.OK)
@@ -65,7 +65,7 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update category by id")
-    public ResponseEntity<ApiResponseCategory<Category>> updateCategory(@RequestBody CategoryRequest categoryRequest , @PathVariable Integer id){
+    public ResponseEntity<ApiResponseCategory<Category>> updateCategory(@RequestBody CategoryRequest categoryRequest , @PathVariable Long id){
         ApiResponseCategory<Category> apiResponseCategory = ApiResponseCategory.<Category>builder()
                 .message("Category updated successfully.")
                 .status(HttpStatus.OK)
@@ -76,7 +76,7 @@ public class CategoryController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete category by id")
-    public ResponseEntity<ApiResponseCategory<Category>> deleteCategory(@PathVariable Integer id){
+    public ResponseEntity<ApiResponseCategory<Category>> deleteCategory(@PathVariable Long id){
         categoryService.deleteCategory(id);
         ApiResponseCategory<Category> apiResponseCategory = ApiResponseCategory.<Category>builder()
                 .message("Category deleted successfully.")
