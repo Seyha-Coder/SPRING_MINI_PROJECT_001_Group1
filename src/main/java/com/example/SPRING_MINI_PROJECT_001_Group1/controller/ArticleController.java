@@ -8,9 +8,9 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoArticle.dtoArticl
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoArticle.dtoArticleRequest.DTORequestArticle;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoComment.dtoCommentRequest.DTOCommentRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoComment.dtoCommentResponse.DTOCommentResponse;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Article;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.AppUserService;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.ArticleService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -31,6 +31,8 @@ public class ArticleController {
     private final ArticleService articleService;
     private final AppUserService appUserService;
     @PostMapping("/article")
+    @Operation(summary = "Create a new article",
+            description = "The request has succeeded and a new resource has been created as a result.")
     public ResponseEntity<ApiResponse<Object>> postArticle(@RequestBody DTORequestArticle dtoRequestArticle) throws Exception {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
@@ -44,7 +46,9 @@ public class ArticleController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/article")
+    @GetMapping("/article/all")
+    @Operation(summary = "Get all available articles ",
+            description = "The request has succeeded and a new resource has been created as a result.")
     public ResponseEntity<ApiResponse<Object>> getAll(
             @Positive
             @RequestParam(defaultValue = "1", required = false) Integer pageNo,
@@ -61,7 +65,9 @@ public class ArticleController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PostMapping("/post/comment/article/{id}")
+    @PostMapping("/post/article/{id}/comment")
+    @Operation(summary = "Post a comment on any article via its id",
+            description = "The request has succeeded and a new resource has been created as a result.")
     public ResponseEntity<ApiResponse<Object>> postComment(@PathVariable Long id, @RequestBody DTOCommentRequest dtoCommentRequest){
         DTOCommentResponse postComment = articleService.postComment(id,dtoCommentRequest);
         ApiResponse<Object> apiResponse = ApiResponse.builder()
@@ -72,7 +78,9 @@ public class ArticleController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/getArticleById/{id}")
+    @GetMapping("/article/{id}/comment")
+    @Operation(summary = "Get comment on any article",
+            description = "The request has succeeded and a new resource has been created as a result.")
     public ResponseEntity<ApiResponse<Object>> getArticleById(@PathVariable Long id){
         DTOResponseArticle getArticle = articleService.getArticleById(id);
         ApiResponse<Object> apiResponse = ApiResponse.builder()
@@ -83,7 +91,9 @@ public class ArticleController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/get/article/{id}")
+    @GetMapping("/article/{id}")
+    @Operation(summary = "Get article by id",
+            description = "The request has succeeded and a new resource has been created as a result.")
     public ResponseEntity<ApiResponse<Object>> getCommentArticleById(@PathVariable Long id) {
         DTOArticleCommentResponse getArticleComment = articleService.getCommentArticleById(id);
             ApiResponse<Object> apiResponse = ApiResponse.builder()
@@ -95,9 +105,11 @@ public class ArticleController {
 
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/author/article/{id}")
+    @Operation(summary = "Delete article by id",
+            description = "The request has succeeded and a new resource has been created as a result.")
     public ResponseEntity<ApiResponse<Object>> deleteArticle(@PathVariable Long id) throws Exception {
-        Article deleteArticle = articleService.deleteArticle(id);
+        articleService.deleteArticle(id);
         ApiResponse<Object> apiResponse = ApiResponse.builder()
                 .message("Deleted article by id "+id+" successful")
                 .payload(null)
@@ -106,7 +118,9 @@ public class ArticleController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PutMapping("/update/article/{id}")
+    @PutMapping("/author/article/{id}")
+    @Operation(summary = "Edit article by id",
+            description = "The request has succeeded and a new resource has been created as a result.")
     public ResponseEntity<ApiResponse<Object>> update(@RequestBody DTORequestArticle dtoRequestArticle,@PathVariable Long id) throws Exception {
         DTOArticleCommentResponse updated = articleService.update(id,dtoRequestArticle);
         ApiResponse<Object> apiResponse = ApiResponse.builder()
