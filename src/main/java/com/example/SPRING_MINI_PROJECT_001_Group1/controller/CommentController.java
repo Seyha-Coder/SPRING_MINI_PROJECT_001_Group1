@@ -49,7 +49,7 @@ public class CommentController {
     public ResponseEntity<ApiResponse> deleteCommentById(@Positive @PathVariable Long id){
         service.deleteComment(id);
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("Get comment successfully")
+                .message("Comment with id "+id+" deleted successfully.")
                 .status(HttpStatus.OK)
                 .code(200)
                 .payload(null)

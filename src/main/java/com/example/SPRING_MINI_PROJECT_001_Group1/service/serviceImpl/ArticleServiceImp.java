@@ -45,7 +45,7 @@ public class ArticleServiceImp implements ArticleService {
     public DTOResponseArticleCre postArticle(DTORequestArticle dtoRequestArticle, AppUserDto currentUserDto) throws Exception {
         User currentUser = convertToUserEntity(currentUserDto);
         if (!getCurrentUser.getCurrentUser().getRole().equals("AUTHOR")) {
-            throw new Exception("User reader can not post article");
+            throw new CustomNotfoundException("User reader can not post article");
         }
         List<Category> categories = categoryRepository.findAllById(dtoRequestArticle.getCategoryId());
         String title = dtoRequestArticle.getTitle();
