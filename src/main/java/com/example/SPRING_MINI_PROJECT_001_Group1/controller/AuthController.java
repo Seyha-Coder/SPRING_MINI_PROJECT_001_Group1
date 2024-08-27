@@ -7,6 +7,7 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.AuthRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.UserRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.security.JwtService;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.AppUserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -38,7 +39,7 @@ public class AuthController {
         this.passwordEncoder = passwordEncoder;
         this.modelMapper = modelMapper;
     }
-
+    @Operation(summary = "register as a new user")
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody UserRequest userRequest) {
         AppUserDto appUserDto = appUserService.register(userRequest);
@@ -51,7 +52,7 @@ public class AuthController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
-
+    @Operation(summary = "Login with credentials")
     @PostMapping("/login")
     public ResponseEntity<?> login(@Valid @RequestBody AuthRequest authRequest) throws Exception {
         AppUserDto appUser = appUserService.findUserByEmail(authRequest.getEmail().toLowerCase());
@@ -63,8 +64,6 @@ public class AuthController {
                 .message("You have logged in to the system successfully.")
                 .status(HttpStatus.OK)
                 .build();
-
-        // Return the response
         return ResponseEntity.ok(apiResponse);
     }
 

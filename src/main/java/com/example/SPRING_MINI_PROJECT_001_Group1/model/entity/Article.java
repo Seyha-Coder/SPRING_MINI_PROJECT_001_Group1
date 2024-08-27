@@ -1,7 +1,11 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryArticleResponse;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,22 +24,27 @@ public class Article {
     private Long id;
     private String title;
     private String description;
+    @CreationTimestamp
+    @Column(updatable = false)
     private LocalDateTime createdAt;
+    @UpdateTimestamp
+    @Column(updatable = false)
     private LocalDateTime updatedAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+    @JsonManagedReference
     @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
     private List<Bookmark> bookmark = new ArrayList<>();
-
     @OneToMany(mappedBy = "article",cascade = CascadeType.ALL)
     private List<Comment> comments = new ArrayList<>();
-
     @OneToMany(mappedBy = "articles",cascade = {CascadeType.PERSIST,CascadeType.REMOVE, CascadeType.MERGE},orphanRemoval = true)
     private List<CategoryArticle> categoryArticles = new ArrayList<>();
     public void addComment(Comment comment) {
         comments.add(comment);
         comment.setArticle(this);
     }
-
+    public CategoryArticleResponse toResponse(){
+        return new CategoryArticleResponse(this.id,this.title,this.description,this.createdAt,this.user.getId());
+    }
 }

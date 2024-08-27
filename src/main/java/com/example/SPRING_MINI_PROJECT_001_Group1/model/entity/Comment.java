@@ -1,5 +1,6 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -27,8 +28,8 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @ManyToOne
     @JoinColumn(name = "article_id")
+    @JsonIgnore
     private Article article;
 }
