@@ -1,5 +1,7 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryArticleResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryGetResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
@@ -22,15 +24,21 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
     private String categoryName;
-    private Float amountOfArticle;
+    private Integer amountOfArticle;
     private LocalDateTime createAt;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime updateAt;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     @JsonIgnore
     private User user;
-    @OneToMany(mappedBy = "categories")
-    @JsonIgnore
-    private List<CategoryArticle> category_article;
+
+    @OneToMany(mappedBy = "categories",cascade = CascadeType.ALL)
+//    @JsonIgnore
+    private List<CategoryArticle> articleList;
+
+    public CategoryGetResponse toResponse(){
+        return new CategoryGetResponse(this.categoryId,this.categoryName, (int) this.articleList.stream().map(article -> article.getArticles().toResponse()).count(),this.createAt,
+                this.updateAt,this.articleList.stream().map(article -> article.getArticles().toResponse()).toList());
+    }
 }

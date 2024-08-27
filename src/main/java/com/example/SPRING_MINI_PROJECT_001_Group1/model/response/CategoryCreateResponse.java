@@ -1,5 +1,6 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.response;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Setter
 @Getter
-public class CategoryResponse {
+public class CategoryCreateResponse {
     private Integer categoryId;;
     private String categoryName;
     private LocalDateTime createAt;

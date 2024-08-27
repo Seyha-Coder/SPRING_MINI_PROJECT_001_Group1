@@ -1,5 +1,7 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryArticleResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryGetResponse;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -31,5 +33,9 @@ public class Article {
     private List<Comment> comments = new ArrayList<>();
     @OneToMany(mappedBy = "articles")
     private List<CategoryArticle> categoryArticles = new ArrayList<>();
+
+    public CategoryArticleResponse toResponse(){
+        return new CategoryArticleResponse(this.id,this.title,this.description,this.createdAt,this.user.getId());
+    }
 
 }

@@ -2,7 +2,8 @@ package com.example.SPRING_MINI_PROJECT_001_Group1.controller;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Category;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.ApiResponseCategory;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.CategoryRequest;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryCreateResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryGetResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.CategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -27,18 +28,19 @@ public class CategoryController {
 
     @GetMapping
     @Operation(summary = "Get all category")
-    public ResponseEntity<ApiResponseCategory<List<Category>>> getAllCategory(@Positive @RequestParam (defaultValue = "1") Integer pageNo,
-                                            @RequestParam (defaultValue = "10") Integer pageSize,
-                                            @RequestParam (defaultValue = "categoryId") String sortBy,
-                                            @RequestParam Sort.Direction orderBy){
-        List<Category> categories = categoryService.getAllCategory(pageNo, pageSize, sortBy, orderBy);
-        ApiResponseCategory<List<Category>> apiResponseCategory = ApiResponseCategory.<List<Category>>builder()
+    public ResponseEntity<ApiResponseCategory<List<CategoryGetResponse>>> getAllCategory(@Positive @RequestParam (defaultValue = "1") Integer pageNo,
+                                                                                         @RequestParam (defaultValue = "10") Integer pageSize,
+                                                                                         @RequestParam (defaultValue = "categoryId") String sortBy,
+                                                                                         @RequestParam Sort.Direction orderBy){
+        List<CategoryGetResponse> categories = categoryService.getAllCategory(pageNo, pageSize, sortBy, orderBy);
+        ApiResponseCategory<List<CategoryGetResponse>> apiResponseCategory = ApiResponseCategory.<List<CategoryGetResponse>>builder()
                 .message("Get all categories successfully.")
                 .status(HttpStatus.OK)
                 .payload(categories)
                 .build();
         return ResponseEntity.ok(apiResponseCategory);
     }
+
     @GetMapping("/{id}")
     @Operation(summary = "Get category by id")
     public ResponseEntity<ApiResponseCategory<Category>> getByIdCategory(@PathVariable Integer id){
@@ -52,8 +54,8 @@ public class CategoryController {
 
     @PostMapping
     @Operation(summary = "Create a new category")
-    public ResponseEntity<ApiResponseCategory<CategoryResponse>> createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
-        ApiResponseCategory<CategoryResponse> apiResponseCategory = ApiResponseCategory.<CategoryResponse>builder()
+    public ResponseEntity<ApiResponseCategory<CategoryCreateResponse>> createCategory(@Valid @RequestBody CategoryRequest categoryRequest){
+        ApiResponseCategory<CategoryCreateResponse> apiResponseCategory = ApiResponseCategory.<CategoryCreateResponse>builder()
                 .message("A new category is created successfully.")
                 .status(HttpStatus.CREATED)
                 .payload(categoryService.createCategory(categoryRequest))

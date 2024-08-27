@@ -5,10 +5,10 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.exception.CustomNotfoundExcept
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Category;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.User;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.request.CategoryRequest;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryCreateResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryGetResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.repository.CategoryRepository;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.CategoryService;
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -38,13 +38,14 @@ public class CategoryServiceImp implements CategoryService {
         return category;
     }
 
+
     @Override
-    public CategoryResponse createCategory(CategoryRequest categoryRequest) {
+    public CategoryCreateResponse createCategory(CategoryRequest categoryRequest) {
         Category category = categoryRequest.toEntity();
         category.setCreateAt(LocalDateTime.now());
         category.setUser(currentUser.getCurrentUser());
         Category savaCategory = categoryRepository.save(category);
-        return new CategoryResponse(savaCategory.getCategoryId(),savaCategory.getCategoryName(),savaCategory.getCreateAt());
+        return new CategoryCreateResponse(savaCategory.getCategoryId(),savaCategory.getCategoryName(),savaCategory.getCreateAt());
     }
 
     @Override
@@ -72,11 +73,15 @@ public class CategoryServiceImp implements CategoryService {
         return category;
     }
 
+
     @Override
-    public List<Category> getAllCategory(Integer pageNo, Integer pageSize, String sortBy, Sort.Direction orderBy) {
+    public List<CategoryGetResponse> getAllCategory(Integer pageNo, Integer pageSize, String sortBy, Sort.Direction orderBy) {
         User user = currentUser.getCurrentUser();
         Pageable pageable = PageRequest.of(pageNo - 1, pageSize, Sort.by(orderBy, sortBy));
         Page<Category> categories = categoryRepository.findByUserId(user.getId(), pageable);
-        return categories.getContent();
+
+        return categories.getContent().stream().map(Category::toResponse).toList();
     }
+
+
 }
