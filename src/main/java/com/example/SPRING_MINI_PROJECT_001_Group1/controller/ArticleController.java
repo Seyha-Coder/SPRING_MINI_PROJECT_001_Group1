@@ -108,7 +108,7 @@ public class ArticleController {
     @DeleteMapping("/author/article/{id}")
     @Operation(summary = "Delete article by id",
             description = "The request has succeeded and a new resource has been created as a result.")
-    public ResponseEntity<ApiResponse<Object>> deleteArticle(@PathVariable Long id) throws Exception {
+    public ResponseEntity<ApiResponse<Object>> deleteArticle(@PathVariable Long id) {
         articleService.deleteArticle(id);
         ApiResponse<Object> apiResponse = ApiResponse.builder()
                 .message("Deleted article by id "+id+" successful")

@@ -23,7 +23,7 @@ public interface ArticleService {
 
     DTOArticleCommentResponse getCommentArticleById(Long id);
 
-    Article deleteArticle(Long id) throws Exception;
+    Article deleteArticle(Long id) ;
 
     DTOArticleCommentResponse update(Long id, DTORequestArticle dtoRequestArticle) throws Exception;
 

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -147,9 +148,9 @@ public class ArticleServiceImp implements ArticleService {
     }
 
     @Override
-    public Article deleteArticle(Long id) throws Exception {
+    public Article deleteArticle(Long id)  {
         if (!getCurrentUser.getCurrentUser().getRole().equals("AUTHOR")) {
-            throw new Exception("User reader can not delete article");
+            throw new CustomNotfoundException("User reader can not delete article");
         }
         Article article = articleRepository.findById(id).orElseThrow(
                 ()-> new CustomNotfoundException("Not found Article with id "+id)
@@ -161,9 +162,9 @@ public class ArticleServiceImp implements ArticleService {
     }
 
     @Override
-    public DTOArticleCommentResponse update(Long id, DTORequestArticle dtoRequestArticle) throws Exception {
+    public DTOArticleCommentResponse update(Long id, DTORequestArticle dtoRequestArticle) {
         if (!getCurrentUser.getCurrentUser().getRole().equals("AUTHOR")) {
-            throw new Exception("User reader cannot update article");
+            throw new CustomNotfoundException("User reader cannot update article");
         }
 
         Article article = articleRepository.findById(id).orElseThrow(
