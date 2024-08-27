@@ -24,7 +24,6 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
-
     @ManyToOne
     @JoinColumn(name = "article_id")
     private Article article;

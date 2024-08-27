@@ -1,6 +1,12 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryArticleResponse;
+import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.CategoryGetResponse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +24,21 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer categoryId;
     private String categoryName;
-    private float amountOfArticle;
+    private Integer amountOfArticle;
     private LocalDateTime createAt;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private LocalDateTime updateAt;
     @ManyToOne
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
-    @OneToMany(mappedBy = "categories")
-    private List<CategoryArticle> category_article;
+
+    @OneToMany(mappedBy = "categories",cascade = CascadeType.ALL,orphanRemoval = true)
+//    @JsonIgnore
+    private List<CategoryArticle> articleList;
+
+    public CategoryGetResponse toResponse(){
+        return new CategoryGetResponse(this.categoryId,this.categoryName, (int) this.articleList.stream().map(article -> article.getArticles().toResponse()).count(),this.createAt,
+                this.updateAt,this.articleList.stream().map(article -> article.getArticles().toResponse()).toList());
+    }
 }

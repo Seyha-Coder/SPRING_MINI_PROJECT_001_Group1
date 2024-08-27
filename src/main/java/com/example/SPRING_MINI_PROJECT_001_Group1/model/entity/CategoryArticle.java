@@ -18,10 +18,10 @@ public class CategoryArticle {
     private Integer id;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "category_id")
     private Category categories;
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "article_id")
     private Article articles;
 }
