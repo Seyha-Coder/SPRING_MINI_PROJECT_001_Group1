@@ -82,9 +82,10 @@ public class ArticleServiceImp implements ArticleService {
     @Override
     public List<DTOResponseArticle> getAll(Integer pageNo, Integer pageSize, String sortBy, Sort.Direction sortDirection) {
         Sort sort = Sort.by(sortDirection, sortBy);
-        Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
+        Pageable pageable = PageRequest.of(pageNo-1, pageSize, sort);
         Page<Article> articlePage = articleRepository.findAll(pageable);
         List<Article> articleList = articlePage.getContent();
+
         List<DTOResponseArticle> dtoResponseArticles = new ArrayList<>();
         for (Article article : articleList) {
             DTOResponseArticle dtoResponseArticle = new DTOResponseArticle();

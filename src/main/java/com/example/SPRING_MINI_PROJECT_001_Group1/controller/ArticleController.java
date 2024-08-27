@@ -12,6 +12,7 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Article;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.AppUserService;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.ArticleService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -45,14 +46,15 @@ public class ArticleController {
 
     @GetMapping("/article")
     public ResponseEntity<ApiResponse<Object>> getAll(
-            @RequestParam(defaultValue = "0", required = false) Integer pageNo,
+            @Positive
+            @RequestParam(defaultValue = "1", required = false) Integer pageNo,
             @RequestParam(defaultValue = "5", required = false) Integer pageSize,
             @RequestParam(defaultValue = "id", required = false) String sortBy,
             @RequestParam(defaultValue = "ASC", required = false) Sort.Direction sortDirection
     ){
         List<DTOResponseArticle> getAllArticle = articleService.getAll(pageNo,pageSize,sortBy,sortDirection);
         ApiResponse<Object> apiResponse = ApiResponse.builder()
-                .message("Get all article")
+                .message("Get all article successful .")
                 .payload(getAllArticle)
                 .status(HttpStatus.OK)
                 .build();
