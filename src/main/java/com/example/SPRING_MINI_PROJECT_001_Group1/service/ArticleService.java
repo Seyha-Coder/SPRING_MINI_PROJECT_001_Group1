@@ -8,7 +8,6 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoArticle.dtoArticl
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoComment.dtoCommentRequest.DTOCommentRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoComment.dtoCommentResponse.DTOCommentResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Article;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Comment;
 import org.springframework.data.domain.Sort;
 
 import java.util.List;
@@ -17,7 +16,6 @@ public interface ArticleService {
     DTOResponseArticleCre postArticle(DTORequestArticle dtoRequestArticle, AppUserDto currentUser) throws Exception;
 
     List<DTOResponseArticle> getAll(Integer pageNo, Integer pageSize, String sortBy, Sort.Direction sortDirection);
-
 
     DTOCommentResponse postComment(Long id, DTOCommentRequest dtoCommentRequest);
 
@@ -29,5 +27,4 @@ public interface ArticleService {
 
     DTOArticleCommentResponse update(Long id, DTORequestArticle dtoRequestArticle) throws Exception;
 
-//    List<Article> getAllArticlesForCurrentUser(Integer pageNo, Integer pageSize, String sortBy, Sort.Direction sortDirection);
 }

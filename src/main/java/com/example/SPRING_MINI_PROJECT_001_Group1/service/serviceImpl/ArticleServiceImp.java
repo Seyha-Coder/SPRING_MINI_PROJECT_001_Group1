@@ -23,10 +23,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -47,9 +44,19 @@ public class ArticleServiceImp implements ArticleService {
     @Override
     public DTOResponseArticleCre postArticle(DTORequestArticle dtoRequestArticle, AppUserDto currentUserDto) throws Exception {
         User currentUser = convertToUserEntity(currentUserDto);
-        List<Category> categories = categoryRepository.findAllById(dtoRequestArticle.getCategoryId());
         if (!getCurrentUser.getCurrentUser().getRole().equals("AUTHOR")) {
             throw new Exception("User reader can not post article");
+        }
+        List<Category> categories = categoryRepository.findAllById(dtoRequestArticle.getCategoryId());
+        String title = dtoRequestArticle.getTitle();
+        String description = dtoRequestArticle.getDescription();
+
+        if (title == null || title.trim().isEmpty() || !title.matches("[a-zA-Z0-9 ]+")) {
+            throw new CustomNotfoundException("Title cannot be blank and must contain only valid characters");
+        }
+
+        if (description == null || description.trim().isEmpty() || !description.matches("[a-zA-Z0-9 ]+")) {
+            throw new CustomNotfoundException("Description cannot be blank and must contain only valid characters");
         }
         Article article = new Article();
         article.setTitle(dtoRequestArticle.getTitle());
@@ -66,7 +73,7 @@ public class ArticleServiceImp implements ArticleService {
         }
         // Save the article
         Article savedArticle = articleRepository.save(article);
-        // Map the saved article to a DTO response
+
         DTOResponseArticleCre dtoResponseArticle = new DTOResponseArticleCre();
         dtoResponseArticle.responseArticle(savedArticle);
         return dtoResponseArticle;
@@ -81,10 +88,6 @@ public class ArticleServiceImp implements ArticleService {
         List<DTOResponseArticle> dtoResponseArticles = new ArrayList<>();
         for (Article article : articleList) {
             DTOResponseArticle dtoResponseArticle = new DTOResponseArticle();
-//            List<Integer> categoryIdList = new ArrayList<>();
-//            for (CategoryArticle categoryArticle : article.getCategoryArticles()){
-//                categoryIdList.add(categoryArticle.getCategories().getCategoryId());
-//            }
             dtoResponseArticle.responseArticleWithCategoryIdList(article);
             dtoResponseArticles.add(dtoResponseArticle);
         }
@@ -96,12 +99,16 @@ public class ArticleServiceImp implements ArticleService {
         Article article = articleRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Article with id " + id + " does not exist.")
         );
-
+        // validation comment
+        String com = commentRequest.getComment();
+        if (com == null || com.trim().isEmpty() || !com.matches("[a-zA-Z0-9 ]+")) {
+            throw new CustomNotfoundException("Comment cannot be blank and must contain only valid characters");
+        }
+        //Comment set value
         Comment comment = new Comment();
         comment.setCmt(commentRequest.getComment());
         comment.setArticle(article);
         comment.setUser(article.getUser());
-
         Comment savedComment = commentRepository.save(comment);
 
         article.addComment(savedComment);
@@ -119,7 +126,9 @@ public class ArticleServiceImp implements ArticleService {
 
     @Override
     public DTOResponseArticle getArticleById(Long id) {
-        Article article = articleRepository.findById(id).orElse(null);
+        Article article = articleRepository.findById(id).orElseThrow(
+                () -> new CustomNotfoundException("Not Found")
+        );
         DTOResponseArticle dtoResponseArticle = new DTOResponseArticle();
         dtoResponseArticle.responseArticleWithCategoryIdList(article);
         return dtoResponseArticle;
@@ -127,7 +136,9 @@ public class ArticleServiceImp implements ArticleService {
 
     @Override
     public DTOArticleCommentResponse getCommentArticleById(Long id) {
-        Article article  = articleRepository.findById(id).orElse(null);
+        Article article  = articleRepository.findById(id).orElseThrow(
+                () -> new CustomNotfoundException("not found with id "+ id)
+        );
         DTOArticleCommentResponse dtoArticleCommentResponse = new DTOArticleCommentResponse();
         dtoArticleCommentResponse.responseArticleComment(article);
         return dtoArticleCommentResponse;
@@ -138,7 +149,9 @@ public class ArticleServiceImp implements ArticleService {
         if (!getCurrentUser.getCurrentUser().getRole().equals("AUTHOR")) {
             throw new Exception("User reader can not delete article");
         }
-        Article article = articleRepository.findById(id).orElse(null);
+        Article article = articleRepository.findById(id).orElseThrow(
+                ()-> new CustomNotfoundException("Not found Article with id "+id)
+        );
         if (!Objects.isNull(article)){
             articleRepository.deleteById(id);
         }
@@ -151,13 +164,19 @@ public class ArticleServiceImp implements ArticleService {
             throw new Exception("User reader cannot update article");
         }
 
-        Article article = articleRepository.findById(id).orElse(null);
-        if (article == null) {
-            throw new Exception("Article not found");
+        Article article = articleRepository.findById(id).orElseThrow(
+                ()-> new CustomNotfoundException("Delete article with id "+id+"not found")
+        );
+
+        String title = dtoRequestArticle.getTitle();
+        if (title == null || title.trim().isEmpty() || !title.matches("[a-zA-Z0-9 ]+")) {
+            throw new CustomNotfoundException("Title cannot be blank and must contain only valid characters");
         }
-
+        String description = dtoRequestArticle.getDescription();
+        if (description == null || description.trim().isEmpty() || !description.matches("[a-zA-Z0-9 ]+")) {
+            throw new CustomNotfoundException("Description cannot be blank and must contain only valid characters");
+        }
         categoryArticleRepository.deleteAllByArticles(article);
-
         article.setTitle(dtoRequestArticle.getTitle());
         article.setDescription(dtoRequestArticle.getDescription());
 
@@ -168,15 +187,11 @@ public class ArticleServiceImp implements ArticleService {
             categoryArticle.setCategories(category);
             article.getCategoryArticles().add(categoryArticle);
         }
-
         Article updatedArticle = articleRepository.save(article);
-
         DTOArticleCommentResponse dtoArticleCommentResponse = new DTOArticleCommentResponse();
         dtoArticleCommentResponse.responseArticleComment(updatedArticle);
-
         return dtoArticleCommentResponse;
     }
-
 
 
 }

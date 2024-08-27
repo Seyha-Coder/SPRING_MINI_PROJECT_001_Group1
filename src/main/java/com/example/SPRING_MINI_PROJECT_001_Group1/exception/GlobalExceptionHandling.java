@@ -66,5 +66,6 @@ public class GlobalExceptionHandling {
         problemDetail.setProperty("error", errors);
         return problemDetail;
     }
+
 }
 

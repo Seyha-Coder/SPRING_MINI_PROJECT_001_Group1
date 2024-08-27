@@ -9,23 +9,17 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoArticle.dtoArticl
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoComment.dtoCommentRequest.DTOCommentRequest;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.dto.dtoComment.dtoCommentResponse.DTOCommentResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Article;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Comment;
-import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.User;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.AppUserService;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.ArticleService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -40,9 +34,7 @@ public class ArticleController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         AppUserDto currentUser = appUserService.findUserByusername(username);
-
         DTOResponseArticleCre createdArticle = articleService.postArticle(dtoRequestArticle, currentUser);
-
         ApiResponse<Object> apiResponse = ApiResponse.builder()
                 .message("A new article is created successfully.")
                 .payload(createdArticle)
@@ -50,7 +42,6 @@ public class ArticleController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
-
 
     @GetMapping("/article")
     public ResponseEntity<ApiResponse<Object>> getAll(
@@ -66,10 +57,9 @@ public class ArticleController {
                 .status(HttpStatus.OK)
                 .build();
         return ResponseEntity.ok(apiResponse);
-
     }
 
-    @PostMapping("/post-comment/{id}")
+    @PostMapping("/post/comment/article/{id}")
     public ResponseEntity<ApiResponse<Object>> postComment(@PathVariable Long id, @RequestBody DTOCommentRequest dtoCommentRequest){
         DTOCommentResponse postComment = articleService.postComment(id,dtoCommentRequest);
         ApiResponse<Object> apiResponse = ApiResponse.builder()
@@ -90,17 +80,18 @@ public class ArticleController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
-    @GetMapping("/get-article/{id}")
-    public ResponseEntity<ApiResponse<Object>> getCommentArticleById(@PathVariable Long id){
-        DTOArticleCommentResponse getArticleComment = articleService.getCommentArticleById(id);
-        ApiResponse<Object> apiResponse = ApiResponse.builder()
-                .message("Get article with id "+id+" successfully")
-                .payload(getArticleComment)
-                .status(HttpStatus.OK)
-                .build();
-        return ResponseEntity.ok(apiResponse);
-    }
 
+    @GetMapping("/get/article/{id}")
+    public ResponseEntity<ApiResponse<Object>> getCommentArticleById(@PathVariable Long id) {
+        DTOArticleCommentResponse getArticleComment = articleService.getCommentArticleById(id);
+            ApiResponse<Object> apiResponse = ApiResponse.builder()
+                    .message("Get article with id " + id + " successfully")
+                    .payload(getArticleComment)
+                    .status(HttpStatus.OK)
+                    .build();
+            return ResponseEntity.ok(apiResponse);
+
+    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ApiResponse<Object>> deleteArticle(@PathVariable Long id) throws Exception {
@@ -113,7 +104,6 @@ public class ArticleController {
         return ResponseEntity.ok(apiResponse);
     }
 
-
     @PutMapping("/update/article/{id}")
     public ResponseEntity<ApiResponse<Object>> update(@RequestBody DTORequestArticle dtoRequestArticle,@PathVariable Long id) throws Exception {
         DTOArticleCommentResponse updated = articleService.update(id,dtoRequestArticle);
@@ -124,7 +114,5 @@ public class ArticleController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
-
-
 
 }
