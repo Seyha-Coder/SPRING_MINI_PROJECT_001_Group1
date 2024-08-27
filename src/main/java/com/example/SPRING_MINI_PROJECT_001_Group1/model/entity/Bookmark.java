@@ -1,5 +1,6 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class Bookmark {
     private LocalDateTime updatedAt;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "article_id")
+    @JsonBackReference
     private Article article;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")

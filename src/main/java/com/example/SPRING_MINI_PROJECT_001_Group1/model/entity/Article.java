@@ -1,5 +1,6 @@
 package com.example.SPRING_MINI_PROJECT_001_Group1.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -26,6 +27,7 @@ public class Article {
     @JoinColumn(name = "user_id")
     private User user;
     @OneToMany(mappedBy = "article")
+    @JsonManagedReference
     private List<Bookmark> bookmark = new ArrayList<>();
     @OneToMany(mappedBy = "article")
     private List<Comment> comments = new ArrayList<>();
