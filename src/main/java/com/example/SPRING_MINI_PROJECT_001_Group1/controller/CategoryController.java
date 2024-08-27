@@ -43,9 +43,9 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get category by id")
-    public ResponseEntity<ApiResponseCategory<Category>> getByIdCategory(@PathVariable Long id){
-        ApiResponseCategory<Category> apiResponseCategory = ApiResponseCategory.<Category>builder()
-                .message("Get category with id 16 successfully.")
+    public ResponseEntity<ApiResponseCategory<CategoryGetResponse>> getByIdCategory(@PathVariable Long id){
+        ApiResponseCategory<CategoryGetResponse> apiResponseCategory = ApiResponseCategory.<CategoryGetResponse>builder()
+                .message("Get category with id "+id+" successfully.")
                 .status(HttpStatus.OK)
                 .payload(categoryService.getByIdCategory(id))
                 .build();

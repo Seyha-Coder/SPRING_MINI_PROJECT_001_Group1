@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface CategoryService {
 
-    Category getByIdCategory(Long id);
+    CategoryGetResponse getByIdCategory(Long id);
 
     CategoryCreateResponse createCategory(CategoryRequest categoryRequest);
 

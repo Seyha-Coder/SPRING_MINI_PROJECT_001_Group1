@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface BookmarkService {
     List<ApiResponseBookmark> getAllBookmarks(Integer pageNo, Integer pageSize, String sortBy, String sortDirection);
-    Bookmark addBookmark(Long bookmarkId);
-    Bookmark updateBookmark(Long bookmarkId, Boolean status);
+    Bookmark addBookmark(Long articleId);
+    Bookmark updateBookmark(Long articleId, Boolean status);
 }

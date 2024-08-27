@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface BookmarkRepository extends JpaRepository<Bookmark, Long> {
     Page<Bookmark> findBookmarkByStatus(Boolean status, Pageable pageable);
+    boolean existsByArticleIdAndUserId(Long articleId, Long userId);
 }

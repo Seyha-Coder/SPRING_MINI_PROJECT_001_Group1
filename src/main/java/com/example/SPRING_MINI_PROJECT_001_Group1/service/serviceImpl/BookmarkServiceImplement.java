@@ -37,7 +37,6 @@ public class BookmarkServiceImplement implements BookmarkService {
 
     @Override
     public List<ApiResponseBookmark> getAllBookmarks(Integer pageNo, Integer pageSize, String sortBy, String sortDirection) {
-        // Validate parameters
         if (pageNo == null || pageNo < 0 || pageSize == null || pageSize <= 0) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid page number or page size");
         }
@@ -46,16 +45,13 @@ public class BookmarkServiceImplement implements BookmarkService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid sort parameters");
         }
 
-        // Sorting direction logic
         Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection) ? Sort.Direction.DESC : Sort.Direction.ASC;
         Sort sort = Sort.by(direction, sortBy);
 
-        // Fetch bookmarks
         Pageable pageable = PageRequest.of(pageNo, pageSize, sort);
         Page<Bookmark> allBookmarks = bookmarkRepository.findBookmarkByStatus(true, pageable);
         List<Bookmark> bookmarks = allBookmarks.getContent();
 
-        // Build the response
         List<ApiResponseBookmark> apiResponseBookmarks = new ArrayList<>();
         for (Bookmark bookmark : bookmarks) {
             ApiResponseBookmark responseBookmark = new ApiResponseBookmark();
@@ -82,9 +78,15 @@ public class BookmarkServiceImplement implements BookmarkService {
 
 
     @Override
-    public Bookmark addBookmark(Long bookmarkId) {
-        Article article = articleRepository.findById(bookmarkId)
-                .orElseThrow(() -> new CustomNotfoundException("Article not found with id " + bookmarkId));
+    public Bookmark addBookmark(Long articleId) {
+        Long userId = currentUser.getCurrentUser().getId();
+        boolean alreadyBookmarked = bookmarkRepository.existsByArticleIdAndUserId(articleId, userId);
+        if (alreadyBookmarked) {
+            throw new CustomNotfoundException("Article already bookmarked by user.");
+        }
+        Article article = articleRepository.findById(articleId).orElseThrow(
+                () -> new CustomNotfoundException("Article not found with id " + articleId)
+        );
         Bookmark bookmark = new Bookmark();
         bookmark.setStatus(true);
         bookmark.setCreatedAt(LocalDateTime.now());
@@ -95,9 +97,9 @@ public class BookmarkServiceImplement implements BookmarkService {
     }
 
     @Override
-    public Bookmark updateBookmark(Long bookmarkId, Boolean status) {
-       Bookmark bookmark = bookmarkRepository.findById(bookmarkId).orElseThrow(
-               () -> new CustomNotfoundException("Bookmark not found with id: " + bookmarkId)
+    public Bookmark updateBookmark(Long articleId, Boolean status) {
+       Bookmark bookmark = bookmarkRepository.findById(articleId).orElseThrow(
+               () -> new CustomNotfoundException("Bookmark not found with id: " + articleId)
        );
        bookmark.setStatus(status);
        bookmark.setUpdatedAt(LocalDateTime.now());

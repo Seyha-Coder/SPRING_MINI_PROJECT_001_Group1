@@ -27,7 +27,7 @@ public class CategoryServiceImp implements CategoryService {
 
 
     @Override
-    public Category getByIdCategory(Long id) {
+    public CategoryGetResponse getByIdCategory(Long id) {
         Long userId= currentUser.getCurrentUser().getId();
         Category category = categoryRepository.findById(id).orElseThrow(
                 () -> new CustomNotfoundException("Category id "+ id + "not found.")
@@ -35,7 +35,7 @@ public class CategoryServiceImp implements CategoryService {
         if(category.getUser().getId() != userId){
             throw new CustomNotfoundException(" You have no permission to access!");
         }
-        return category;
+        return category.toResponse();
     }
 
 
