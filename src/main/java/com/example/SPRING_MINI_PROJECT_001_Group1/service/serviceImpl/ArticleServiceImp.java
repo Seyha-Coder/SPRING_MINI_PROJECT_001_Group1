@@ -59,6 +59,16 @@ public class ArticleServiceImp implements ArticleService {
         if (description == null || description.trim().isEmpty() || !description.matches("[a-zA-Z0-9 ]+")) {
             throw new CustomNotfoundException("Description cannot be blank and must contain only valid characters");
         }
+
+        if (dtoRequestArticle.getCategoryId() == null || dtoRequestArticle.getCategoryId().isEmpty()) {
+            throw new CustomNotfoundException("Category ID list cannot be empty. You must provide at least one category ID.");
+        }
+        for (Long categoryId : dtoRequestArticle.getCategoryId()) {
+            if (categoryId == null || categoryId.toString().trim().isEmpty() || categoryId < 1) {
+                throw new CustomNotfoundException("Category IDs must be valid positive numbers and cannot be blank.");
+            }
+        }
+
         Article article = new Article();
         article.setTitle(dtoRequestArticle.getTitle());
         article.setDescription(dtoRequestArticle.getDescription());
@@ -180,6 +190,13 @@ public class ArticleServiceImp implements ArticleService {
         if (description == null || description.trim().isEmpty() || !description.matches("[a-zA-Z0-9 ]+")) {
             throw new CustomNotfoundException("Description cannot be blank and must contain only valid characters");
         }
+
+        for (Long categoryId : dtoRequestArticle.getCategoryId()) {
+            if (categoryId == null || categoryId.toString().trim().isEmpty() || categoryId < 1) {
+                throw new CustomNotfoundException("Category IDs must be valid positive numbers and cannot be blank.");
+            }
+        }
+
 
         List<Long> categoryIds = dtoRequestArticle.getCategoryId();
         if (categoryIds != null && !categoryIds.isEmpty()) {
