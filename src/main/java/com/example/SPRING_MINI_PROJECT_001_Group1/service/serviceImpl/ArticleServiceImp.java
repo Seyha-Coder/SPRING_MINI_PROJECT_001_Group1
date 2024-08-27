@@ -58,6 +58,16 @@ public class ArticleServiceImp implements ArticleService {
         if (description == null || description.trim().isEmpty() || !description.matches("[a-zA-Z0-9 ]+")) {
             throw new CustomNotfoundException("Description cannot be blank and must contain only valid characters");
         }
+
+        if (dtoRequestArticle.getCategoryId() == null || dtoRequestArticle.getCategoryId().isEmpty()) {
+            throw new CustomNotfoundException("Category ID list cannot be empty. You must provide at least one category ID.");
+        }
+        for (Long categoryId : dtoRequestArticle.getCategoryId()) {
+            if (categoryId == null || categoryId.toString().trim().isEmpty() || categoryId < 1) {
+                throw new CustomNotfoundException("Category IDs must be valid positive numbers and cannot be blank.");
+            }
+        }
+
         Article article = new Article();
         article.setTitle(dtoRequestArticle.getTitle());
         article.setDescription(dtoRequestArticle.getDescription());
@@ -161,35 +171,52 @@ public class ArticleServiceImp implements ArticleService {
     }
 
     @Override
-    public DTOArticleCommentResponse update(Long id, DTORequestArticle dtoRequestArticle) throws Exception {
+    public DTOArticleCommentResponse update(Long id, DTORequestArticle dtoRequestArticle) {
         if (!getCurrentUser.getCurrentUser().getRole().equals("AUTHOR")) {
             throw new CustomNotfoundException("User reader cannot update article");
         }
 
         Article article = articleRepository.findById(id).orElseThrow(
-                ()-> new CustomNotfoundException("Delete article with id "+id+"not found")
+                () -> new CustomNotfoundException("Article with id " + id + " not found")
         );
 
         String title = dtoRequestArticle.getTitle();
         if (title == null || title.trim().isEmpty() || !title.matches("[a-zA-Z0-9 ]+")) {
             throw new CustomNotfoundException("Title cannot be blank and must contain only valid characters");
         }
+
         String description = dtoRequestArticle.getDescription();
         if (description == null || description.trim().isEmpty() || !description.matches("[a-zA-Z0-9 ]+")) {
             throw new CustomNotfoundException("Description cannot be blank and must contain only valid characters");
         }
-        categoryArticleRepository.deleteAllByArticles(article);
-        article.setTitle(dtoRequestArticle.getTitle());
-        article.setDescription(dtoRequestArticle.getDescription());
 
-        List<Category> categories = categoryRepository.findAllById(dtoRequestArticle.getCategoryId());
-        for (Category category : categories) {
-            CategoryArticle categoryArticle = new CategoryArticle();
-            categoryArticle.setArticles(article);
-            categoryArticle.setCategories(category);
-            article.getCategoryArticles().add(categoryArticle);
+        for (Long categoryId : dtoRequestArticle.getCategoryId()) {
+            if (categoryId == null || categoryId.toString().trim().isEmpty() || categoryId < 1) {
+                throw new CustomNotfoundException("Category IDs must be valid positive numbers and cannot be blank.");
+            }
         }
+
+
+        List<Long> categoryIds = dtoRequestArticle.getCategoryId();
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            categoryArticleRepository.deleteAllByArticles(article);
+            List<Category> categories = categoryRepository.findAllById(categoryIds);
+            if (categories.size() != categoryIds.size()) {
+                throw new CustomNotfoundException("Category with IDs provided are not valid.");
+            }
+            for (Category category : categories) {
+                CategoryArticle categoryArticle = new CategoryArticle();
+                categoryArticle.setArticles(article);
+                categoryArticle.setCategories(category);
+                categoryArticle.setUpdatedAt(LocalDateTime.now());
+                article.getCategoryArticles().add(categoryArticle);
+            }
+        }
+        article.setTitle(title);
+        article.setDescription(description);
+
         Article updatedArticle = articleRepository.save(article);
+
         DTOArticleCommentResponse dtoArticleCommentResponse = new DTOArticleCommentResponse();
         dtoArticleCommentResponse.responseArticleComment(updatedArticle);
         return dtoArticleCommentResponse;

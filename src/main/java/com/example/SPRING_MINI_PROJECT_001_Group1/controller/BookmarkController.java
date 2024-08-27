@@ -4,6 +4,7 @@ import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.ApiResponse;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.response.ApiResponseBookmark;
 import com.example.SPRING_MINI_PROJECT_001_Group1.model.entity.Bookmark;
 import com.example.SPRING_MINI_PROJECT_001_Group1.service.BookmarkService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +22,7 @@ public class BookmarkController {
 
     private final BookmarkService bookmarkService;
 
-
+    @Operation(summary = "Get a list of bookmarked article")
     @GetMapping
     public ResponseEntity<?> getAllBookmarks(
            @RequestParam(defaultValue = "0") Integer pageNo,
@@ -38,7 +39,7 @@ public class BookmarkController {
                 .build();
         return ResponseEntity.ok(response);
     }
-
+    @Operation(summary = "Add bookmark on any articles")
     @PostMapping("/{id}")
     public ResponseEntity<?> createBookmark(@PathVariable Long id) {
         Bookmark bookmark = bookmarkService.addBookmark(id);
@@ -50,7 +51,7 @@ public class BookmarkController {
                 .build();
         return ResponseEntity.ok(apiResponse);
     }
-
+    @Operation(summary = "Change bookmark status")
     @PutMapping("/{id}")
     public ResponseEntity<?> updateBookmark(@PathVariable Long id, @RequestParam Boolean status) {
         Bookmark bookmark = bookmarkService.updateBookmark(id, status);
